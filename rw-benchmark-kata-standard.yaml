@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rw-benchmark-kata-standard
+  labels:
+    app: rw-benchmark-kata-standard
+spec:
+  tolerations:
+    - key: "node.kubernetes.io/kata-containers"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+  nodeSelector:
+    node.kubernetes.io/kata-containers: "true"
+  runtimeClassName: kata-qemu
+  restartPolicy: Never
+  containers:
+    - name: test
+      command:
+        - python
+        - /app/write_data.py
+        - "--test-path"
+        - "/test-volume/data"
+        - "4096"
+      volumeMounts:
+        - name: test-volume
+          mountPath: /test-volume
+      image: evanfoster/kata-virtiofs-naive-rw-benchmark
+      imagePullPolicy: Always
+      resources:
+        limits:
+          cpu: 4
+          memory: 4Gi
+        requests:
+          cpu: 4
+          memory: 4Gi
+  dnsPolicy: Default
+  volumes:
+    - name: test-volume
+      emptyDir: {}
