@@ -6,13 +6,6 @@ metadata:
   labels:
     app: rw-benchmark-kata-standard
 spec:
-  tolerations:
-    - key: "node.kubernetes.io/kata-containers"
-      operator: "Equal"
-      value: "true"
-      effect: "NoSchedule"
-  nodeSelector:
-    node.kubernetes.io/kata-containers: "true"
   runtimeClassName: kata-qemu
   restartPolicy: Never
   containers:
